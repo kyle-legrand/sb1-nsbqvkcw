@@ -8,6 +8,7 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { rainbowTheme } from "@/lib/rainbow-theme";
 
 const navItems = [
   {
@@ -59,22 +60,32 @@ export function Header() {
   }, []);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 w-full transition-all duration-200",
-        isScrolled ? "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b" : "bg-transparent"
-      )}
-    >
-      <div className="container flex h-16 items-center justify-between py-4">
-        <div className="flex items-center gap-6 md:gap-10">
-          <Link href="/" className="hidden items-center space-x-2 md:flex">
-            <Logo className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">
-              Foundry
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 items-center">
+        <div className="mr-4 flex">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <div className="relative h-6 w-6">
+              <img
+                src="/mackerel.svg"
+                alt="Holy Mackerel Logo"
+                className="h-full w-full"
+                data-testid="logo"
+              />
+            </div>
+            <span 
+              className="font-bold inline-block bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 animate-rainbow"
+              style={{
+                backgroundImage: rainbowTheme.gradients.primary,
+                backgroundSize: '200% 200%',
+                animation: 'rainbow 8s linear infinite',
+              }}
+            >
+              Holy Mackerel
             </span>
           </Link>
-
-          <div className="hidden gap-6 md:flex">
+        </div>
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
             <NavigationMenu>
               <NavigationMenuList>
                 {navItems.map((item) =>
@@ -113,31 +124,9 @@ export function Header() {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="hidden md:flex md:items-center md:gap-2">
+          <nav className="flex items-center">
             <ModeToggle />
-            <Button variant="outline" size="sm" asChild>
-              <Link href="#">Log in</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="#">Sign up</Link>
-            </Button>
-          </div>
-
-          <div className="flex items-center md:hidden">
-            <ModeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="ml-2"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </div>
+          </nav>
         </div>
       </div>
 

@@ -9,8 +9,8 @@ import { sendWebVitals } from '@/lib/vitals';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Foundry - Modern SaaS Platform',
-  description: 'Streamline your workflow with our powerful SaaS solution',
+  title: 'Holy Mackerel - Rainbow Themed SaaS Platform',
+  description: 'Dive into a colorful experience with our vibrant SaaS solution',
 };
 
 export default function RootLayout({
