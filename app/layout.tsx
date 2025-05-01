@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { cn } from '@/lib/utils';
+import { onCLS, onFCP, onFID, onLCP, onTTFB } from 'web-vitals';
+import { sendWebVitals } from '@/lib/vitals';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,6 +18,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (typeof window !== 'undefined') {
+    // Report Core Web Vitals
+    onCLS(sendWebVitals);
+    onFID(sendWebVitals);
+    onLCP(sendWebVitals);
+    onFCP(sendWebVitals);
+    onTTFB(sendWebVitals);
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(

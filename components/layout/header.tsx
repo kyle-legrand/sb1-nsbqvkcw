@@ -97,15 +97,16 @@ export function Header() {
                     </NavigationMenuItem>
                   ) : (
                     <NavigationMenuItem key={item.title}>
-                      <Link href={item.href} legacyBehavior passHref>
-                        <NavigationMenuLink
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href={item.href}
                           className={cn(
                             "group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
                           )}
                         >
                           {item.title}
-                        </NavigationMenuLink>
-                      </Link>
+                        </Link>
+                      </NavigationMenuLink>
                     </NavigationMenuItem>
                   )
                 )}
@@ -143,23 +144,25 @@ export function Header() {
       {/* Mobile menu */}
       {isOpen && (
         <div className="container py-4 md:hidden">
-          <nav className="flex flex-col space-y-3">
+          <nav className="flex flex-col space-y-3" aria-label="mobile">
             {navItems.map((item) => (
               <Link
                 key={item.title}
                 href={item.href}
                 className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                }}
               >
                 {item.title}
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-2">
               <Button variant="outline" asChild className="justify-center">
-                <Link href="#">Log in</Link>
+                <Link href="#" onClick={() => setIsOpen(false)}>Log in</Link>
               </Button>
               <Button asChild className="justify-center">
-                <Link href="#">Sign up</Link>
+                <Link href="#" onClick={() => setIsOpen(false)}>Sign up</Link>
               </Button>
             </div>
           </nav>
