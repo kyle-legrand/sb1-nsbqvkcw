@@ -9,8 +9,8 @@ import { sendWebVitals } from '@/lib/vitals';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Holy Mackerel - Rainbow Themed SaaS Platform',
-  description: 'Dive into a colorful experience with our vibrant SaaS solution',
+  title: 'MahiFlow - Fish Health Monitoring Platform',
+  description: 'Monitor fish activity and health with our lightweight tracking device.',
 };
 
 export default function RootLayout({

@@ -72,10 +72,10 @@ describe('Header Component', () => {
     return render(<Header />);
   };
 
-  it('renders the header with logo and company name', () => {
-    setup();
+  it('renders the logo and brand name', () => {
+    render(<Header />);
     expect(screen.getByTestId('logo')).toBeInTheDocument();
-    expect(screen.getByText('Holy Mackerel')).toBeInTheDocument();
+    expect(screen.getByText('MahiFlow')).toBeInTheDocument();
   });
 
   it('renders navigation links', () => {

@@ -8,7 +8,7 @@ import { motion } from "@/lib/motion";
 const testimonials = [
   {
     content:
-      "With eight arms to multitask, I know efficiency when I see it! Holy Mackerel's platform has helped our team handle multiple projects simultaneously with incredible ease.",
+      "With eight arms to multitask, I know efficiency when I see it! MahiFlow's platform has helped our team handle multiple projects simultaneously with incredible ease.",
     author: {
       name: "Ogden Octopus",
       role: "Deep Sea Operations Director",
@@ -39,27 +39,29 @@ export function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="bg-muted/50 py-20 md:py-32"
+      className="w-full bg-muted/50 py-16"
     >
-      <div className="container">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mx-auto text-center text-3xl font-bold tracking-tight sm:text-4xl">
             Making Waves in the Industry
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Dive into what our underwater friends have to say about their experience
-            with Holy Mackerel.
+            with MahiFlow.
           </p>
         </div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              testimonial={testimonial}
-              index={index}
-            />
-          ))}
+        <div className="mx-auto max-w-7xl">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((testimonial, index) => (
+              <TestimonialCard
+                key={index}
+                testimonial={testimonial}
+                index={index}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

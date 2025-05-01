@@ -6,7 +6,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { rainbowTheme } from "@/lib/rainbow-theme";
 import Image from "next/image";
@@ -80,34 +80,26 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
-            <div className="relative h-6 w-6">
-              <Image
-                src="/mackerel.svg"
-                alt="Holy Mackerel Logo"
-                width={24}
-                height={24}
-                priority
-                className="h-full w-full"
-                data-testid="logo"
-              />
-            </div>
-            <span 
-              className="font-bold inline-block bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 animate-rainbow"
-              style={{
-                backgroundImage: rainbowTheme.gradients.primary,
-                backgroundSize: '200% 200%',
-                animation: 'rainbow 8s linear infinite',
-              }}
-            >
-              Holy Mackerel
-            </span>
-          </Link>
-        </div>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <div className="flex h-14 items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="relative h-6 w-6">
+                <Image
+                  src="/mackerel.svg"
+                  alt="MahiFlow Logo"
+                  width={24}
+                  height={24}
+                  className="h-full w-full"
+                  priority
+                  data-testid="logo"
+                />
+              </div>
+              <span className="font-bold">MahiFlow</span>
+            </Link>
+          </div>
+          
+          <div className="hidden md:flex md:flex-1 md:justify-center">
             <NavigationMenu>
               <NavigationMenuList>
                 {navItems.map((item) =>
@@ -146,37 +138,55 @@ export function Header() {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          <nav className="flex items-center">
+
+          <div className="flex items-center gap-2 sm:gap-4">
             <ModeToggle />
-          </nav>
+            <div className="hidden sm:flex sm:items-center sm:gap-4">
+              <Button variant="outline" asChild>
+                <Link href="#">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link href="#">Get Started</Link>
+              </Button>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="container py-4 md:hidden">
-          <nav className="flex flex-col space-y-3" aria-label="mobile">
-            {navItems.map((item) => (
-              <Link
-                key={item.title}
-                href={item.href}
-                className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-              >
-                {item.title}
-              </Link>
-            ))}
-            <div className="flex flex-col gap-2 pt-2">
-              <Button variant="outline" asChild className="justify-center">
-                <Link href="#" onClick={() => setIsOpen(false)}>Log in</Link>
-              </Button>
-              <Button asChild className="justify-center">
-                <Link href="#" onClick={() => setIsOpen(false)}>Sign up</Link>
-              </Button>
-            </div>
-          </nav>
+        <div className="border-t py-4 md:hidden">
+          <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
+            <nav className="flex flex-col space-y-3">
+              {navItems.map((item) => (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.title}
+                </Link>
+              ))}
+              <div className="flex flex-col gap-2 pt-2">
+                <Button variant="outline" asChild className="justify-center">
+                  <Link href="#" onClick={() => setIsOpen(false)}>Sign In</Link>
+                </Button>
+                <Button asChild className="justify-center">
+                  <Link href="#" onClick={() => setIsOpen(false)}>Get Started</Link>
+                </Button>
+              </div>
+            </nav>
+          </div>
         </div>
       )}
     </header>

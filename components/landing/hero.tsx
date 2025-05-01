@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion } from "@/lib/motion";
+import { DevicePreview } from "./device-preview";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden py-20 md:py-32">
+    <section className="relative overflow-hidden py-12 md:py-20">
       {/* Background gradient */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background to-transparent" />
@@ -18,8 +19,8 @@ export function Hero() {
         />
       </div>
 
-      <div className="container relative z-10">
-        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -35,9 +36,9 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl"
+            className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
           >
-            Streamline Your Workflow{" "}
+            Track Fish Health{" "}
             <span className="text-primary">Effortlessly</span>
           </motion.h1>
 
@@ -45,43 +46,27 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-6 max-w-2xl text-lg text-muted-foreground"
+            className="mt-4 max-w-2xl text-lg text-muted-foreground px-4"
           >
-            Boost productivity with our intuitive platform designed for teams of
-            all sizes. Simplify complex tasks and focus on what truly matters.
+            Monitor fish activity, health, and environmental conditions with our lightweight
+            tracking device. Get real-time insights for better aquatic ecosystem management.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-4"
+            className="mt-6 flex flex-wrap items-center justify-center gap-4"
           >
             <Button size="lg" asChild>
               <Link href="#">Get Started</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="#">Live Demo</Link>
+              <Link href="#">View Demo</Link>
             </Button>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-16 rounded-xl border bg-card p-1 shadow-lg"
-          >
-            <div className="relative aspect-video w-full max-w-5xl overflow-hidden rounded-lg bg-muted/50">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex flex-col items-center">
-                  <div className="h-16 w-16 rounded-full bg-primary/10 backdrop-blur-sm"></div>
-                  <span className="mt-4 text-sm font-medium">
-                    Product preview
-                  </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          <DevicePreview />
         </div>
       </div>
     </section>

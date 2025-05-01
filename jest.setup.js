@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom';
+require('@testing-library/jest-dom');
 
 // Mock the window.matchMedia function
 Object.defineProperty(window, 'matchMedia', {
@@ -13,4 +13,27 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-}); 
+});
+
+// Mock IntersectionObserver
+class IntersectionObserver {
+  constructor(callback) {
+    this.callback = callback;
+  }
+
+  observe() {
+    // Trigger the callback with an entry that is intersecting
+    this.callback([{ isIntersecting: true }]);
+    return null;
+  }
+
+  unobserve() {
+    return null;
+  }
+
+  disconnect() {
+    return null;
+  }
+}
+
+global.IntersectionObserver = IntersectionObserver; 
