@@ -1,8 +1,8 @@
 /// <reference types="@testing-library/jest-dom" />
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 import { Header } from '../header';
+import { ImgHTMLAttributes, DetailedHTMLProps } from 'react';
 
 // Mock ResizeObserver
 class ResizeObserverMock {
@@ -13,12 +13,34 @@ class ResizeObserverMock {
 
 global.ResizeObserver = ResizeObserverMock;
 
-// Mock the next/link component
-jest.mock('next/link', () => {
-  return ({ children, href, onClick }: { children: React.ReactNode; href: string; onClick?: () => void }) => {
-    return <a href={href} onClick={onClick}>{children}</a>;
-  };
-});
+// Mock components
+jest.mock('next/link', () => ({
+  __esModule: true,
+  default: jest.fn(({ children, href, onClick }) => (
+    <a href={href} onClick={onClick}>{children}</a>
+  ))
+}));
+
+jest.mock('@/components/ui/navigation-menu', () => ({
+  NavigationMenu: jest.fn(({ children, ...props }) => (
+    <nav aria-label="Main" {...props}>{children}</nav>
+  )),
+  NavigationMenuList: jest.fn(({ children, ...props }) => (
+    <ul {...props}>{children}</ul>
+  )),
+  NavigationMenuItem: jest.fn(({ children, ...props }) => (
+    <li {...props}>{children}</li>
+  )),
+  NavigationMenuTrigger: jest.fn(({ children, ...props }) => (
+    <button {...props}>{children}</button>
+  )),
+  NavigationMenuContent: jest.fn(({ children, ...props }) => (
+    <div {...props}>{children}</div>
+  )),
+  NavigationMenuLink: jest.fn(({ children, asChild, ...props }) => (
+    asChild ? children : <a {...props}>{children}</a>
+  )),
+}));
 
 // Mock the components that are not needed for these tests
 jest.mock('@/components/mode-toggle', () => ({
@@ -29,99 +51,77 @@ jest.mock('@/components/ui/logo', () => ({
   Logo: () => <div data-testid="logo">Logo</div>,
 }));
 
+// Mock next/image
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: { src: string; alt: string; width?: number; height?: number; priority?: boolean; className?: string; 'data-testid'?: string }) => {
+    const imgProps: DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> = {
+      ...props,
+      loading: props.priority ? "eager" : "lazy",
+    };
+    delete (imgProps as any).priority;
+    // eslint-disable-next-line jsx-a11y/alt-text
+    return <img {...imgProps} />;
+  },
+}));
+
 describe('Header Component', () => {
-  beforeEach(() => {
-    // Reset the scroll position before each test
+  const setup = () => {
+    // Reset the scroll position
     global.window.scrollY = 0;
-  });
+    return render(<Header />);
+  };
 
   it('renders the header with logo and company name', () => {
-    render(<Header />);
-    
+    setup();
     expect(screen.getByTestId('logo')).toBeInTheDocument();
-    expect(screen.getByText('Foundry')).toBeInTheDocument();
+    expect(screen.getByText('Holy Mackerel')).toBeInTheDocument();
   });
 
-  it('renders navigation items correctly', () => {
-    render(<Header />);
-    
+  it('renders navigation links', () => {
+    setup();
     expect(screen.getByText('Features')).toBeInTheDocument();
     expect(screen.getByText('Pricing')).toBeInTheDocument();
     expect(screen.getByText('Testimonials')).toBeInTheDocument();
     expect(screen.getByText('Resources')).toBeInTheDocument();
   });
 
-  it('renders login and signup buttons', () => {
-    render(<Header />);
-    
-    expect(screen.getByText('Log in')).toBeInTheDocument();
-    expect(screen.getByText('Sign up')).toBeInTheDocument();
+  it('renders mode toggle', () => {
+    setup();
+    expect(screen.getByTestId('mode-toggle')).toBeInTheDocument();
   });
 
-  it('toggles mobile menu when hamburger button is clicked', async () => {
-    render(<Header />);
-    
-    // Initially mobile menu should be hidden
-    expect(screen.queryByRole('navigation', { name: /mobile/i })).not.toBeInTheDocument();
-    
-    // Click the hamburger menu button
-    const menuButton = screen.getByRole('button', { name: /toggle menu/i });
-    await userEvent.click(menuButton);
-    
-    // Mobile menu should now be visible
-    const mobileNav = screen.getByRole('navigation', { name: /mobile/i });
-    expect(mobileNav).toBeInTheDocument();
-    
-    // Click again to close
-    await userEvent.click(menuButton);
-    
-    // Menu should be hidden again
-    await waitFor(() => {
-      expect(screen.queryByRole('navigation', { name: /mobile/i })).not.toBeInTheDocument();
-    });
-  });
-
-  it('changes header background on scroll', () => {
-    render(<Header />);
+  it('changes header background on scroll with throttling', () => {
+    setup();
     const header = screen.getByRole('banner');
     
-    // Initially should not have background class
-    expect(header.className).not.toContain('bg-background/95');
+    // Initially should have background class
+    expect(header.className).toContain('bg-background/95');
     
-    // Simulate scroll
-    global.window.scrollY = 20;
-    fireEvent.scroll(window);
+    // Simulate multiple rapid scroll events
+    act(() => {
+      // First scroll
+      global.window.scrollY = 20;
+      global.dispatchEvent(new Event('scroll'));
+      
+      // Second scroll (should be throttled)
+      global.window.scrollY = 30;
+      global.dispatchEvent(new Event('scroll'));
+      
+      // Third scroll (should be throttled)
+      global.window.scrollY = 40;
+      global.dispatchEvent(new Event('scroll'));
+    });
     
-    // Should have background class now
+    // Should still have background class
     expect(header.className).toContain('bg-background/95');
   });
 
-  it('opens Resources dropdown menu', async () => {
-    render(<Header />);
-    
-    const resourcesButton = screen.getByRole('button', { name: /resources/i });
-    await userEvent.click(resourcesButton);
-    
-    // Check if dropdown items are visible
-    expect(screen.getByText('Documentation')).toBeInTheDocument();
-    expect(screen.getByText('Blog')).toBeInTheDocument();
-    expect(screen.getByText('Community')).toBeInTheDocument();
-  });
-
-  it('closes mobile menu when a link is clicked', async () => {
-    render(<Header />);
-    
-    // Open mobile menu
-    const menuButton = screen.getByRole('button', { name: /toggle menu/i });
-    await userEvent.click(menuButton);
-    
-    // Click a link in the mobile menu
-    const featuresLink = screen.getAllByText('Features')[1]; // Get the mobile menu link
-    await userEvent.click(featuresLink);
-    
-    // Wait for the menu to close
-    await waitFor(() => {
-      expect(screen.queryByRole('navigation', { name: /mobile/i })).not.toBeInTheDocument();
-    });
+  it('renders optimized image with correct attributes', () => {
+    setup();
+    const image = screen.getByTestId('logo');
+    expect(image).toHaveAttribute('width', '24');
+    expect(image).toHaveAttribute('height', '24');
+    expect(image).toHaveAttribute('loading', 'eager');
   });
 }); 

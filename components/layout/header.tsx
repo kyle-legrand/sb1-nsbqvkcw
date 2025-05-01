@@ -9,6 +9,22 @@ import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { rainbowTheme } from "@/lib/rainbow-theme";
+import Image from "next/image";
+
+// Custom throttle implementation
+function throttle<T extends (...args: any[]) => any>(
+  func: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean;
+  return function(this: any, ...args: Parameters<T>): void {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+}
 
 const navItems = [
   {
@@ -29,7 +45,7 @@ const navItems = [
     children: [
       {
         title: "Documentation",
-        href: "#",
+        href: "/docs",
         description: "Detailed guides and API references",
       },
       {
@@ -50,14 +66,17 @@ export function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
 
-  React.useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  const handleScroll = React.useCallback(() => {
+    setIsScrolled(window.scrollY > 10);
   }, []);
+
+  React.useEffect(() => {
+    const throttledScroll = throttle(handleScroll, 100);
+    window.addEventListener("scroll", throttledScroll);
+    return () => {
+      window.removeEventListener("scroll", throttledScroll);
+    };
+  }, [handleScroll]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -65,9 +84,12 @@ export function Header() {
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <div className="relative h-6 w-6">
-              <img
+              <Image
                 src="/mackerel.svg"
                 alt="Holy Mackerel Logo"
+                width={24}
+                height={24}
+                priority
                 className="h-full w-full"
                 data-testid="logo"
               />
@@ -161,7 +183,7 @@ export function Header() {
   );
 }
 
-const ListItem = React.forwardRef<
+const ListItem = React.memo(React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
@@ -184,5 +206,5 @@ const ListItem = React.forwardRef<
       </NavigationMenuLink>
     </li>
   );
-});
+}));
 ListItem.displayName = "ListItem";

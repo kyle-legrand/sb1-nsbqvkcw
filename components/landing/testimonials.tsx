@@ -8,29 +8,29 @@ import { motion } from "@/lib/motion";
 const testimonials = [
   {
     content:
-      "This platform has completely transformed how our team works. We've seen a 40% increase in productivity since implementing it.",
+      "With eight arms to multitask, I know efficiency when I see it! Holy Mackerel's platform has helped our team handle multiple projects simultaneously with incredible ease.",
     author: {
-      name: "Sarah Johnson",
-      role: "Project Manager",
-      avatar: "SJ",
+      name: "Ogden Octopus",
+      role: "Deep Sea Operations Director",
+      avatar: "/ogden-octopus.svg",
     },
   },
   {
     content:
-      "The analytics features provide insights we never had before. It's changed our decision-making process for the better.",
+      "As someone who's always moving forward, I appreciate how streamlined this platform is. It's got real teeth when it comes to project management!",
     author: {
-      name: "David Chen",
-      role: "Director of Operations",
-      avatar: "DC",
+      name: "Sammy Shark",
+      role: "Chief Predator Officer",
+      avatar: "/sammy-shark.svg",
     },
   },
   {
     content:
-      "As a startup founder, I needed something scalable and affordable. This solution exceeded my expectations on both fronts.",
+      "I'll sting the shit out of you if you don't use this platform. It's that good. The flexibility flows like ocean currents, and the transparent pricing really brightens up my day!",
     author: {
-      name: "Maria Rodriguez",
-      role: "CEO & Founder",
-      avatar: "MR",
+      name: "Jerry Jellyfish",
+      role: "Bioluminescence Manager",
+      avatar: "/jerry-jellyfish.svg",
     },
   },
 ];
@@ -44,11 +44,11 @@ export function Testimonials() {
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Trusted by teams worldwide
+            Making Waves in the Industry
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Don't just take our word for it — hear what our users have to say
-            about their experience.
+            Dive into what our underwater friends have to say about their experience
+            with Holy Mackerel.
           </p>
         </div>
 
@@ -94,11 +94,12 @@ function TestimonialCard({ testimonial, index }: TestimonialCardProps) {
         <CardFooter>
           <div className="flex items-center gap-4">
             <Avatar>
-              <AvatarFallback>{testimonial.author.avatar}</AvatarFallback>
+              <AvatarImage src={testimonial.author.avatar} alt={testimonial.author.name} />
+              <AvatarFallback>{testimonial.author.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{testimonial.author.name}</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm font-medium leading-none">{testimonial.author.name}</p>
+              <p className="text-xs text-muted-foreground mt-1">
                 {testimonial.author.role}
               </p>
             </div>

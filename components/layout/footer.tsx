@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-2">
             <Logo className="h-6 w-6" />
-            <span className="font-bold">Foundry</span>
+            <span className="font-bold">Holy Mackerel</span>
           </Link>
           <p className="max-w-xs text-sm text-muted-foreground">
             Streamline your workflow with our powerful SaaS solution.
@@ -102,7 +102,7 @@ export function Footer() {
       <div className="border-t py-6">
         <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-center text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} Foundry, Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Holy Mackerel, Inc. All rights reserved.
           </p>
           <div className="flex gap-4">
             <Link
