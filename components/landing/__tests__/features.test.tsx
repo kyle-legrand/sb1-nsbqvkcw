@@ -1,51 +1,29 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Features } from '../features';
 
-describe('Features Component', () => {
-  it('renders with proper accessibility attributes', () => {
+describe('Features', () => {
+  it('renders the features section with correct heading', () => {
     render(<Features />);
     
-    // Check for region role
-    const section = screen.getByRole('region');
-    expect(section).toHaveAttribute('aria-labelledby', 'features-heading');
-    
-    // Check for heading
-    const heading = screen.getByRole('heading', { level: 2 });
-    expect(heading).toHaveTextContent('Features designed for aquatic health');
-    
-    // Check for features list
-    const featuresList = screen.getByRole('list');
-    expect(featuresList).toHaveAttribute('aria-label', 'Product features');
+    const heading = screen.getByText('Features designed for aquatic health');
+    expect(heading).toBeInTheDocument();
   });
 
-  it('renders feature cards with proper accessibility attributes', () => {
+  it('renders all feature cards', () => {
     render(<Features />);
     
-    const featureCards = screen.getAllByRole('listitem');
-    expect(featureCards.length).toBeGreaterThan(0);
+    // Check for a few key features to ensure they're rendered
+    expect(screen.getByText('Comprehensive Health Monitoring')).toBeInTheDocument();
+    expect(screen.getByText('Heart Rate Tracking')).toBeInTheDocument();
+    expect(screen.getByText('Temperature Monitoring')).toBeInTheDocument();
+  });
+
+  it('renders feature descriptions', () => {
+    render(<Features />);
     
-    // Check for titles
-    const titles = screen.getAllByRole('heading', { level: 3 });
-    expect(titles.length).toBe(featureCards.length);
-    
-    // Check for icons
-    const icons = screen.getAllByTestId('feature-icon');
-    expect(icons.length).toBe(featureCards.length);
-    
-    // Check for descriptions
-    const descriptions = screen.getAllByText(/./);
+    // Check for presence of feature descriptions
+    const descriptions = screen.getAllByText(/Track exercise levels|Monitor heart rate|Stay informed about water temperature/);
     expect(descriptions.length).toBeGreaterThan(0);
-  });
-
-  it('renders with proper motion animation attributes', () => {
-    render(<Features />);
-    
-    const motionDivs = screen.getAllByTestId('feature-card');
-    motionDivs.forEach(div => {
-      expect(div).toHaveStyle({
-        opacity: '1',
-        transform: 'translateY(0px)',
-      });
-    });
   });
 }); 

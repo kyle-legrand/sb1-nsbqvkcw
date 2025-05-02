@@ -124,4 +124,22 @@ describe('Header Component', () => {
     expect(image).toHaveAttribute('height', '24');
     expect(image).toHaveAttribute('loading', 'eager');
   });
+
+  it('renders the mobile menu button', () => {
+    render(<Header />);
+    
+    const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+    expect(menuButton).toBeInTheDocument();
+  });
+
+  it('toggles mobile menu when button is clicked', () => {
+    render(<Header />);
+    
+    const menuButton = screen.getByRole('button', { name: /toggle menu/i });
+    fireEvent.click(menuButton);
+    
+    // Check if mobile menu links are visible
+    const mobileLinks = screen.getAllByRole('link', { name: /features|pricing|testimonials|resources|sign in|get started/i });
+    expect(mobileLinks.length).toBeGreaterThan(0);
+  });
 }); 
